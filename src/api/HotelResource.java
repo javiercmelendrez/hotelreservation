@@ -1,4 +1,4 @@
-package Resources;
+package api;
 
 import model.Customer;
 import model.IRoom;
@@ -6,18 +6,17 @@ import model.Reservation;
 import service.CustomerService;
 import service.ReservationService;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class HotelEvents {
-    private static HotelEvents hotelEvent = new HotelEvents();
+public class HotelResource {
+    private static HotelResource hotelEvent = new HotelResource();
     private CustomerService customerService = CustomerService.newObject();
     private ReservationService reservationService = ReservationService.newObject();
 
-    private HotelEvents() {}
+    private HotelResource() {}
 
-    public static HotelEvents getInstance() {
+    public static HotelResource getInstance() {
         return hotelEvent;
     }
 

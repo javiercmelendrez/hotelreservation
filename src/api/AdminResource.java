@@ -1,4 +1,4 @@
-package Resources;
+package api;
 
 import model.Customer;
 import model.IRoom;
@@ -8,14 +8,14 @@ import service.ReservationService;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class AdminEvents {
-    private static AdminEvents adminEvent = new AdminEvents();
+public class AdminResource {
+    private static AdminResource adminEvent = new AdminResource();
     private CustomerService customerService = CustomerService.newObject();
     private ReservationService reservationService = ReservationService.newObject();
 
-    private AdminEvents() {}
+    private AdminResource() {}
 
-    public static AdminEvents getInstance() {
+    public static AdminResource getInstance() {
         return adminEvent;
     }
 

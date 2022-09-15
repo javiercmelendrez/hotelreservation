@@ -1,19 +1,19 @@
 package client;
 
-import Resources.AdminEvents;
-import Resources.HotelEvents;
+import api.AdminResource;
+import api.HotelResource;
 import model.IRoom;
 import model.Reservation;
 
 import java.util.*;
 
-public class PrintMenu {
-    private HotelEvents hotelEvents = HotelEvents.getInstance();
-    private AdminEvents adminEvents = AdminEvents.getInstance();
+public class MainMenu {
+    private HotelResource hotelResource = HotelResource.getInstance();
+    private AdminResource adminResource = AdminResource.getInstance();
     Scanner scanner = new Scanner(System.in);
     Calendar calendar = Calendar.getInstance();
 
-    public PrintMenu() {}
+    public MainMenu() {}
 
     public void initialize() {
         int menuSelection = 0;
@@ -49,7 +49,7 @@ public class PrintMenu {
     }
 
     public void displayMainMenu() {
-        StringBuilder menuSB = new StringBuilder("\nWelcome to the Hotel Reservation Application");
+        StringBuilder menuSB = new StringBuilder("\nWelcome to the Hotel Reservation Application\n");
         menuSB.append("1. Find and reserve a room\n");
         menuSB.append("2. See my reservations\n");
         menuSB.append("3. Create an account\n");
@@ -76,10 +76,10 @@ public class PrintMenu {
         int numberOfDaysOut = 0;
 
         do {
-            Collection<IRoom> rooms = hotelEvents.findARoom(checkInCheckOut[0], checkInCheckOut[1]);
+            Collection<IRoom> rooms = hotelResource.findARoom(checkInCheckOut[0], checkInCheckOut[1]);
             if (rooms.size() == 0) {
-                System.out.println("There are no available rooms in that date range.");
-                System.out.println("Would you like to check with different dates? y/n");
+                System.out.println("No Rooms in those dates");
+                System.out.println("Do you want to check with different dates? y/n");
                 checkForAvailableRooms = scanner.next().equals("y") ? true : false;
                 if (checkForAvailableRooms) {
                     System.out.println("How many days out would you like to check?");
@@ -101,7 +101,7 @@ public class PrintMenu {
                     }
                 });
 
-                System.out.println("\nAvailable For Pay Rooms:");
+                System.out.println("\nAvailable Rooms:");
                 rooms.forEach(room -> {
                     if (!room.isFree()) {
                         System.out.println(room);
@@ -130,7 +130,7 @@ public class PrintMenu {
     public Date[] getCheckInAndCheckOut() {
         Date[] checkInCheckOutDates = new Date[2];
 
-        System.out.println("Enter Check In Date mm/dd/yyyy, example 02/21/2020");
+        System.out.println("Enter Check Date:");
         Date checkIn = new Date();
         try {
             String[] dateInput = scanner.next().split("/");
@@ -142,7 +142,7 @@ public class PrintMenu {
             return null;
         }
 
-        System.out.println("Enter Check Out Date mm/dd/yyyy, example 02/21/2020");
+        System.out.println("Enter Check Out Date mm/dd/yyyy");
         Date checkOut = new Date();
         try {
             String[] dateOutput = scanner.next().split("/");
@@ -150,7 +150,7 @@ public class PrintMenu {
             checkOut = calendar.getTime();
         }
         catch (Exception ex) {
-            System.out.println("Invalid Check Out date entered.");
+            System.out.println("Wrong Date Format entered, you have to enter mm/dd/yyyy format");
             return null;
         }
 
@@ -163,7 +163,7 @@ public class PrintMenu {
     public boolean isBookRoom() {
         String bookRoom = "";
         while (true) {
-            System.out.println("Would you like to book a room? y/n");
+            System.out.println("Do you want to book a room? y/n");
             bookRoom = scanner.next().toLowerCase(Locale.ROOT);
             if(bookRoom.equals("y")) {
                 return true;
@@ -192,11 +192,11 @@ public class PrintMenu {
         String email = "";
         String roomNumber = "";
 
-        System.out.println("Enter Email (format: name@domain.com");
+        System.out.println("Enter Email:");
         email = scanner.next();
-        System.out.println("What room number would you like to reserve?");
+        System.out.println("Enter Room Number:");
         roomNumber = scanner.next();
-        Reservation bookedRoom = hotelEvents.bookARoom(email, hotelEvents.getRoom(roomNumber), checkInDate, checkOutDate);
+        Reservation bookedRoom = hotelResource.bookARoom(email, hotelResource.getRoom(roomNumber), checkInDate, checkOutDate);
 
         if (bookedRoom != null) {
             System.out.println(bookedRoom);
@@ -204,10 +204,10 @@ public class PrintMenu {
     }
 
     public void seeMyReservations() {
-        System.out.println("Enter Email (format: name@domain.com)");
+        System.out.println("Enter Email:");
         String email = scanner.next();
 
-        Collection<Reservation> customerReservations = hotelEvents.getCustomerReservations(email);
+        Collection<Reservation> customerReservations = hotelResource.getCustomerReservations(email);
         if (customerReservations.size() > 0) {
             for (Reservation reservation : customerReservations) {
                 System.out.println(reservation);
@@ -216,16 +216,16 @@ public class PrintMenu {
     }
 
     public void createAnAccount() {
-        System.out.println("Enter First Name and Last Name");
+        System.out.println("Enter Full Name");
         String firstName = scanner.next();
         String lastName = scanner.next();
-        System.out.println("Enter Email (format: name@domain.com)");
+        System.out.println("Enter Email");
         String email = scanner.next();
-        hotelEvents.createACustomer(email, firstName, lastName);
+        hotelResource.createACustomer(email, firstName, lastName);
     }
 
     public void openAdminMenu() {
-        PrintMenu adminMenu = new PrintMenu();
+        AdminMenu adminMenu = new AdminMenu();
         adminMenu.initialize();
     }
 

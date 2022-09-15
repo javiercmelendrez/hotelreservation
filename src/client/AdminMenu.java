@@ -1,7 +1,7 @@
 package client;
 
-import Resources.AdminEvents;
-import Resources.HotelEvents;
+import api.AdminResource;
+import api.HotelResource;
 import model.Customer;
 import model.IRoom;
 
@@ -10,13 +10,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class PrintAdmin {
-    private HotelEvents hotelResource = HotelEvents.getInstance();
-    private AdminEvents adminResource = AdminEvents.getInstance();
+public class AdminMenu {
+    private HotelResource hotelResource = HotelResource.getInstance();
+    private AdminResource adminResource = AdminResource.getInstance();
     Scanner scanner = new Scanner(System.in);
     Calendar calendar = Calendar.getInstance();
 
-    public PrintAdmin() {}
+    public AdminMenu() {}
 
     public void displayAdminMenu() {
         StringBuilder menuSB = new StringBuilder("\nAdmin Menu");
@@ -26,7 +26,6 @@ public class PrintAdmin {
         menuSB.append("3. See all Reservations\n");
         menuSB.append("4. Add a Room\n");
         menuSB.append("5. Back to Main Menu\n");
-        menuSB.append("6. Populate with test data");
         menuSB.append("\n---------------------------------------------\n");
         menuSB.append("Please select a number for the menu option");
 
