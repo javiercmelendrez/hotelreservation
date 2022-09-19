@@ -70,10 +70,10 @@ public class AdminMenu {
     }
 
     public void displayAllCustomers() {
-        Collection<Customer> customers = adminResource.getAllCustomers();
+        HashMap<String, Customer> customers = adminResource.getAllCustomers();
 
-        for(Customer customer : customers) {
-            System.out.println(customer.getEmail());
+        for(String email : customers.keySet()) {
+            System.out.println(customers.get(email));
         }
     }
 

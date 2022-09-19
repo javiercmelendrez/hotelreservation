@@ -5,7 +5,7 @@ import model.*;
 import java.util.*;
 
 public class ReservationService {
-    private static ReservationService reservationService = new ReservationService();
+    private final static ReservationService reservationService = new ReservationService();
     List<Reservation> reservations = new ArrayList<>();
     Map<String, IRoom> rooms = new HashMap<>();
 
@@ -14,7 +14,6 @@ public class ReservationService {
     }
 
     public void addRoom(HashMap<String, IRoom> rooms) {
-        Room newRoom = new Room();
         Scanner scanner = new Scanner(System.in);
         String roomNumber = "";
         double roomPrice = 0.0;
@@ -36,6 +35,7 @@ public class ReservationService {
 
             System.out.println("Is this a free room? y/n");
             String freeRoomInput = scanner.next();
+            Room newRoom;
             if (freeRoomInput.equals("y")) {
                 newRoom = new FreeRoom(roomNumber, roomPrice, roomType = roomTypeInput == 1 ? RoomType.SINGLE : RoomType.DOUBLE);
             } else {
@@ -46,7 +46,7 @@ public class ReservationService {
             rooms.put(roomNumber, newRoom);
 
             System.out.println("Would you like to add another room? y/n");
-            String anotherRoomInput = scanner.next();
+             String anotherRoomInput = scanner.next();
             anotherRoom = anotherRoomInput.equals("y") ? true : false;
         }
     }
@@ -76,22 +76,28 @@ public class ReservationService {
         Date tempCheckIn;
         Date tempCheckOut;
 
-        if (reservations.size() == 0) {
-            // If there are no reservations then all rooms are available.
-            availableRooms = new ArrayList<IRoom>(rooms.values());
+        if (reservations.isEmpty()) {
+
+            //availableRooms = new ArrayList<IRoom>(rooms.values());
+            return new ArrayList<IRoom>(rooms.values());
         } else {
             for (Reservation reservation : reservations) {
+
                 tempReservation = reservation;
                 tempCheckIn = tempReservation.getCheckInDate();
                 tempCheckOut = tempReservation.getCheckOutDate();
 
-                if (checkInDate.equals(tempCheckIn)) {
-                    unavailableRooms.add(tempReservation.getRoom());
-                } else if (checkInDate.after(tempCheckIn) && !checkInDate.after(tempCheckOut)) {
-                    unavailableRooms.add(tempReservation.getRoom());
-                } else if (checkInDate.before(tempCheckIn) && !checkOutDate.before(tempCheckIn)) {
-                    unavailableRooms.add(tempReservation.getRoom());
+                IRoom reserveredRoom = reservation.getRoom();
+
+                if(reserveredRoom.getRoomNumber().equals(reserveredRoom.getRoomNumber())){
+                    if(!reservation.conflictsWithRange(checkInDate, checkOutDate)){
+                        unavailableRooms.add(tempReservation.getRoom());
+                        break;
+                    }
                 }
+
+
+
             }
 
             ArrayList<IRoom> listOfAllRooms = new ArrayList<>(rooms.values());

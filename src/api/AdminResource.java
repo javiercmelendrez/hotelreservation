@@ -31,7 +31,7 @@ public class AdminResource {
         return reservationService.getAllRooms();
     }
 
-    public Collection<Customer> getAllCustomers() {
+    public HashMap<String, Customer> getAllCustomers() {
         return  customerService.getAllCustomers();
     }
 

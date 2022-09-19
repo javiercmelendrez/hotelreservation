@@ -51,6 +51,16 @@ public class Reservation {
         this.checkOutDate = checkOutDate;
     }
 
+    public boolean conflictsWithRange(Date checkInDateInput, Date checkOutDateInput){
+        if (checkOutDate.before(checkInDateInput) || checkInDate.after(checkOutDateInput))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
     @Override
     public String toString() {
         StringBuilder reservationInfo = new StringBuilder("\nReservation Info");
